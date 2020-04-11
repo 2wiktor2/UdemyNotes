@@ -31,7 +31,22 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
         holder.textViewTitle.setText(note.getTitle());
         holder.textViewDescriptoion.setText(note.getDescription());
         holder.textViewDayOfWeek.setText(note.getDayOfWeek());
-        holder.textViewPriority.setText("" + note.getPriority()); // т.к приоритет является int нужно использовать конкатинацию
+
+        int colorId;
+        int priority = note.getPriority();
+        switch (priority) {
+            case 1:
+                colorId = holder.itemView.getResources().getColor(android.R.color.holo_red_light);
+                break;
+            case 2:
+                colorId = holder.itemView.getResources().getColor(android.R.color.holo_orange_light);
+                break;
+            default:
+                colorId = holder.itemView.getResources().getColor(android.R.color.holo_green_light);
+                break;
+        }
+        holder.textViewTitle.setBackgroundColor(colorId);
+        //holder.textViewPriority.setText("" + note.getPriority()); // т.к приоритет является int нужно использовать конкатинацию
         //или использовать   String.format
         //holder.textViewPriority.setText(String.format("%s",note.getPriority()));
     }
@@ -46,14 +61,12 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
         private TextView textViewTitle;
         private TextView textViewDescriptoion;
         private TextView textViewDayOfWeek;
-        private TextView textViewPriority;
 
         public NotesViewHolder(@NonNull View itemView) {
             super(itemView);
             textViewTitle = itemView.findViewById(R.id.textViewTitle);
             textViewDescriptoion = itemView.findViewById(R.id.textViewDescription);
             textViewDayOfWeek = itemView.findViewById(R.id.textViewDayOfWeek);
-            textViewPriority = itemView.findViewById(R.id.textViewPriority);
         }
     }
 
