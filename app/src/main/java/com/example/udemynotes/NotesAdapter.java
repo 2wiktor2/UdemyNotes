@@ -19,8 +19,9 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
         this.notes = notes;
     }
 
-    interface OnNoteClickListener{
+    interface OnNoteClickListener {
         void onNoteClick(int position);
+
         void onLingClick(int position);
     }
 
@@ -40,7 +41,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
         Note note = notes.get(position);
         holder.textViewTitle.setText(note.getTitle());
         holder.textViewDescriptoion.setText(note.getDescription());
-        holder.textViewDayOfWeek.setText(note.getDayOfWeek());
+        holder.textViewDayOfWeek.setText(Note.getDayAsString(note.getDayOfWeek()));
 
         int colorId;
         int priority = note.getPriority();
@@ -82,7 +83,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
                 @Override
                 public void onClick(View v) {
 
-                    if (onNoteClickListener != null){
+                    if (onNoteClickListener != null) {
                         onNoteClickListener.onNoteClick(getAdapterPosition());
                     }
                 }
@@ -90,7 +91,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    if (onNoteClickListener != null){
+                    if (onNoteClickListener != null) {
                         onNoteClickListener.onLingClick(getAdapterPosition());
                     }
                     return true;

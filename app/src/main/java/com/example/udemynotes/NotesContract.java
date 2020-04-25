@@ -17,9 +17,9 @@ public class NotesContract {
                 "(" + _ID + " " + TYPE_INTEGER + " PRIMARY KEY AUTOINCREMENT," +
                 COLUMN_TITLE + " " + TYPE_TEXT + ", " +
                 COLUMN_DESCRIPTION + " " + TYPE_TEXT + ", " +
-                COLUMN_DAY_OF_WEEK + " " + TYPE_TEXT + ", " +
+                COLUMN_DAY_OF_WEEK + " " + TYPE_INTEGER + ", " +
                 COLUMN_PRIORITY + " " + TYPE_INTEGER + ")";
 
-        public static final String DROP_COMAND = "DROP TABLE IF EXISTS" + TABLE_NAME;
+        public static final String DROP_COMAND = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 }
