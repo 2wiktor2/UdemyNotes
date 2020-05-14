@@ -41,7 +41,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
         Note note = notes.get(position);
         holder.textViewTitle.setText(note.getTitle());
         holder.textViewDescriptoion.setText(note.getDescription());
-        holder.textViewDayOfWeek.setText(Note.getDayAsString(note.getDayOfWeek()));
+        holder.textViewDayOfWeek.setText(Note.getDayAsString(note.getDayOfWeek()+1));
 
         int colorId;
         int priority = note.getPriority();

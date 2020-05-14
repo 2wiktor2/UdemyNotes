@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,12 +26,15 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerViewNotes;
     private final ArrayList<Note> notes = new ArrayList<>();
     private NotesAdapter adapter;
+    private NotesDataBase dataBase;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        dataBase = NotesDataBase.getInstance(this);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -40,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
         adapter = new NotesAdapter(notes);
         recyclerViewNotes.setLayoutManager(new LinearLayoutManager(this));
+        getData();
         recyclerViewNotes.setAdapter(adapter);
 
         adapter.setOnNoteClickListener(new NotesAdapter.OnNoteClickListener() {
@@ -73,13 +78,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void remove(int position) {
-        int id = notes.get(position).getId();
+        Note note = notes.get(position);
+        dataBase.notesDao().deleteNote(note);
+        getData();
         adapter.notifyDataSetChanged();
     }
 
     public void onClickAddNote(View view) {
         Intent intent = new Intent(this, AddNoteActivity.class);
         startActivity(intent);
+    }
+
+    private void getData() {
+        List<Note> notesFromDb = dataBase.notesDao().getAllNotes();
+        notes.clear();
+        notes.addAll(notesFromDb);
     }
 
 }
