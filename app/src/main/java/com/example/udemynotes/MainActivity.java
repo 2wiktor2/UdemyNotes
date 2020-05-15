@@ -3,6 +3,9 @@ package com.example.udemynotes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerViewNotes;
     private final ArrayList<Note> notes = new ArrayList<>();
     private NotesAdapter adapter;
-    private NotesDataBase dataBase;
+    private MainViewModel viewModel;
 
 
     @Override
@@ -34,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        dataBase = NotesDataBase.getInstance(this);
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -78,10 +81,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void remove(int position) {
-        Note note = notes.get(position);
-        dataBase.notesDao().deleteNote(note);
-        getData();
-        adapter.notifyDataSetChanged();
+        Note note = adapter.getNotes().get(position);
+        viewModel.deleteNote(note);
     }
 
     public void onClickAddNote(View view) {
@@ -90,9 +91,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getData() {
-        List<Note> notesFromDb = dataBase.notesDao().getAllNotes();
-        notes.clear();
-        notes.addAll(notesFromDb);
+        LiveData<List<Note>> notesFromDb = viewModel.getNotes();
+        notesFromDb.observe(this, new Observer<List<Note>>() {
+            @Override
+            public void onChanged(List<Note> notesFromLiveData) {
+                adapter.setNotes(notesFromLiveData);
+            }
+        });
+
     }
 
 }

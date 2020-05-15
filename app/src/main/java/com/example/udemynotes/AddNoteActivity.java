@@ -2,6 +2,8 @@ package com.example.udemynotes;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.room.Database;
 
 import android.content.ContentValues;
@@ -15,13 +17,15 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.util.List;
+
 public class AddNoteActivity extends AppCompatActivity {
 
     private EditText editTextTitle;
     private EditText editTextDescription;
     private Spinner spinnerDaysOfWeek;
     private RadioGroup radioGroupPriority;
-    private NotesDataBase dataBase;
+    private MainViewModel viewModel;
 
 
     @Override
@@ -29,7 +33,7 @@ public class AddNoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_note);
 
-        dataBase = NotesDataBase.getInstance(this);
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -53,7 +57,7 @@ public class AddNoteActivity extends AppCompatActivity {
 
         if (isFilled(title, description)) {
             Note note = new Note(title, description, dayOfWeek, priority);
-            dataBase.notesDao().insertNote(note);
+            viewModel.insertNote(note);
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         } else {
